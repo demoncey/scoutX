@@ -5,15 +5,12 @@
 #define RX 12 //tx blue
 #define TX 11 //rx blue 
 
-
-
-void send_msg();
-
-
 Bluetooth bluetooth(RX,TX,100);
 
 Supervisor supervisor("ScoutX supervisor");
-Task sMsgTask(&send_msg);
+//major tasks
+Task sendMsgTask(&send_msg);
+Task recvMsgTask(&recv_msg);
 
 
 
@@ -26,8 +23,10 @@ void setup() {
     ; 
   }
   bluetooth.init();
-  supervisor.addTask(sMsgTask);
-  sMsgTask.setPriority(P_HIGH);
+  supervisor.addTask(sendMsgTask);
+  sendMsgTask.setPriority(P_HIGH);
+  supervisor.addTask(recvMsgTask);
+  recvMsgTask.setPriority(P_HIGH);
 }
 
 void loop() {
@@ -45,3 +44,10 @@ void send_msg() {
   Serial.println("Heartbeat msg: "+String(id,HEX));
   bluetooth.send("Heartbeat msg: "+String(id,HEX));
 }
+
+void recv_msg() {
+  String msg = bluetooth.recv();
+  Serial.println("Message from Bluetooth: "+msg);
+}
+
+
