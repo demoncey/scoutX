@@ -1,10 +1,18 @@
+#include <bluetooth.h>
 #include <supervisor.h>
 #include <task.h>
+
+#define RX 12 //tx blue
+#define TX 11 //rx blue 
+
+
+
 void send_msg();
 
 
+Bluetooth bluetooth(RX,TX,100);
 
-Supervisor supervisor("scoutX supervisor");
+Supervisor supervisor("ScoutX supervisor");
 Task sMsgTask(&send_msg);
 
 
@@ -17,6 +25,7 @@ void setup() {
     while (!Serial) {
     ; 
   }
+  bluetooth.init();
   supervisor.addTask(sMsgTask);
   sMsgTask.setPriority(P_HIGH);
 }
@@ -32,6 +41,7 @@ void loop() {
 
 
 void send_msg() {
-  int id = random(1, 1000000000);
-  Serial.println("Heartbeat msg: "+String(id));
+  int id = random(1,65536);
+  Serial.println("Heartbeat msg: "+String(id,HEX));
+  bluetooth.send("Heartbeat msg: "+String(id,HEX));
 }
