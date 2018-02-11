@@ -4,6 +4,21 @@
 
 #define RX 12 //tx blue
 #define TX 11 //rx blue 
+//motor
+#define ENA 10
+#define IN1 9
+#define IN2 8
+#define SPEEDA 200
+// motor two
+#define ENB 5
+#define IN3 7
+#define IN4 6
+#define SPEEDB 180
+
+
+
+
+
 
 Bluetooth bluetooth(RX,TX,100);
 
@@ -22,6 +37,16 @@ void setup() {
     while (!Serial) {
     ; 
   }
+  //setup motor
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+
+  
   bluetooth.init();
   supervisor.addTask(sendMsgTask);
   sendMsgTask.setPriority(P_HIGH);
@@ -32,7 +57,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   supervisor.execute();
-  delay(1000);
+  delay(2000);
 
 }
 
@@ -47,7 +72,49 @@ void send_msg() {
 
 void recv_msg() {
   String msg = bluetooth.recv();
-  Serial.println("Message from Bluetooth: "+msg);
+  if (msg != "") {
+    Serial.println("Message from Bluetooth: "+msg);
+    if(msg== String('1')){
+      //start
+      Task *mStart=new Task(&motorStart);
+      mStart->setMode(MODE_ONCE);
+      supervisor.addTask(*mStart);
+    }
+    if(msg== String('2')){
+      //stop
+      Task *mStop=new Task(&motorStop);
+      mStop->setMode(MODE_ONCE);
+      supervisor.addTask(*mStop);
+    }
+  }
 }
+
+
+void motorStop(){
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,LOW);
+  Serial.println("Motor stopped");
+  bluetooth.send("Motor stopped");
+}
+
+void motorStart(){ 
+
+  digitalWrite(IN1,HIGH);
+  digitalWrite(IN2,LOW);
+  analogWrite(ENA,SPEEDA);
+  digitalWrite(IN3,HIGH);
+  digitalWrite(IN4,LOW);
+  analogWrite(ENB,SPEEDB);
+  Serial.println("Motor started");
+  bluetooth.send("Motor started");
+}
+
+
+
+
+
+
 
 
