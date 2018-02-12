@@ -90,16 +90,14 @@ void recv_msg() {
     }
     if(msg== String('r')){
       //right
-      Task *mRight=new Task(&motorRight);
-      mRight->setMode(MODE_ONCE);
-      supervisor.addTask(mRight);//via ptr
+      TaskBuilder builder;
+      supervisor.addTask(builder.setCallback(&motorRight).setMode(MODE_ONCE).build());//via ptr
       return;
     }
     if(msg== String('l')){
       //left
-      Task *mLeft=new Task(&motorLeft);
-      mLeft->setMode(MODE_ONCE);
-      supervisor.addTask(mLeft);//via ptr
+      TaskBuilder builder;
+      supervisor.addTask(builder.setCallback(&motorLeft).setMode(MODE_ONCE).build());//via ptr
       return;
     }
   }
