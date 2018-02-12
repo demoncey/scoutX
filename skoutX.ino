@@ -15,7 +15,9 @@
 #define IN4 6
 #define SPEEDB 180
 
-
+//ultra sonic sensor HC-SR04
+#define TRIG 4
+#define ECHO 3
 
 
 
@@ -26,6 +28,7 @@ Supervisor supervisor("ScoutX supervisor");
 //major tasks
 Task sendMsgTask(&send_msg);
 Task recvMsgTask(&recv_msg);
+Task calcDistTask(&calcDistance);
 
 
 
@@ -44,14 +47,11 @@ void setup() {
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
-
-
-  
   bluetooth.init();
-  supervisor.addTask(sendMsgTask);
-  sendMsgTask.setPriority(P_HIGH);
-  supervisor.addTask(recvMsgTask);
-  recvMsgTask.setPriority(P_HIGH);
+  //shitty builder
+  supervisor.addTask(sendMsgTask.setPriority(P_HIGH));//by ptr
+  supervisor.addTask(recvMsgTask.setPriority(P_HIGH));//by ptr
+  supervisor.addTask(calcDistTask.setPriority(P_HIGH));//by ptr
 }
 
 void loop() {
@@ -79,26 +79,28 @@ void recv_msg() {
       Task *mStart=new Task(&motorStart);
       mStart->setMode(MODE_ONCE);
       supervisor.addTask(*mStart);
+      return;
     }
     if(msg== String('2')){
       //stop
       Task *mStop=new Task(&motorStop);
       mStop->setMode(MODE_ONCE);
       supervisor.addTask(*mStop);
+      return;
     }
     if(msg== String('r')){
-      //stop
+      //right
       Task *mRight=new Task(&motorRight);
       mRight->setMode(MODE_ONCE);
-      //via pointer
-      supervisor.addTask(mRight);
+      supervisor.addTask(mRight);//via ptr
+      return;
     }
     if(msg== String('l')){
-      //stop
+      //left
       Task *mLeft=new Task(&motorLeft);
       mLeft->setMode(MODE_ONCE);
-      //via pointer
-      supervisor.addTask(mLeft);
+      supervisor.addTask(mLeft);//via ptr
+      return;
     }
   }
 }
@@ -144,6 +146,17 @@ void motorLeft(){
   digitalWrite(IN4,LOW);
   Serial.println("Motor right");
   bluetooth.send("Motor right");
+}
+
+
+
+void calcDistance(){
+  long t , distance;
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+  t = pulseIn(ECHO, HIGH);
+  distance = t / 58;
 }
 
 
