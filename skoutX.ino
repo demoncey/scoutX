@@ -86,6 +86,20 @@ void recv_msg() {
       mStop->setMode(MODE_ONCE);
       supervisor.addTask(*mStop);
     }
+    if(msg== String('r')){
+      //stop
+      Task *mRight=new Task(&motorRight);
+      mRight->setMode(MODE_ONCE);
+      //via pointer
+      supervisor.addTask(mRight);
+    }
+    if(msg== String('l')){
+      //stop
+      Task *mLeft=new Task(&motorLeft);
+      mLeft->setMode(MODE_ONCE);
+      //via pointer
+      supervisor.addTask(mLeft);
+    }
   }
 }
 
@@ -109,6 +123,27 @@ void motorStart(){
   analogWrite(ENB,SPEEDB);
   Serial.println("Motor started");
   bluetooth.send("Motor started");
+}
+
+
+void motorRight(){ 
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,HIGH);
+  digitalWrite(IN4,LOW);
+  analogWrite(ENB,SPEEDB);
+  Serial.println("Motor left");
+  bluetooth.send("Motor left");
+}
+
+void motorLeft(){
+  digitalWrite(IN1,HIGH);
+  digitalWrite(IN2,LOW);
+  analogWrite(ENA,SPEEDA);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,LOW);
+  Serial.println("Motor right");
+  bluetooth.send("Motor right");
 }
 
 
