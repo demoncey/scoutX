@@ -56,7 +56,6 @@ void setup() {
 
 void loop() {
   supervisor.execute();
-  memory();
 }
 
 void send_msg() {
@@ -93,6 +92,12 @@ void recv_msg() {
       //left
       TaskBuilder builder;
       supervisor.addTask(builder.setCallback(&motorLeft).setMode(MODE_ONCE).build());//via ptr
+      return;
+    }
+   if(msg== String('m')){
+      //free ram memory messurment
+      TaskBuilder builder;
+      supervisor.addTask(builder.setCallback(&memory).setMode(MODE_ONCE).build());//via ptr
       return;
     }
   }
