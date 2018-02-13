@@ -55,14 +55,8 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   supervisor.execute();
-  delay(2000);
-
 }
-
-
-
 
 void send_msg() {
   int id = random(1,65536);
