@@ -158,8 +158,9 @@ void calcDistance(){
 void memory(){
   ////https://arduino.stackexchange.com/questions/355/how-much-can-i-recurse-how-much-can-i-recurse-how-much-caqfsdrfw
   extern int __heap_start, *__brkval; 
-  int frame_variable;//pointer last value in stack
-  int memory= (int)&frame_variable - ( __brkval == 0 ? (int) &__heap_start : (int) __brkval);
+  //__brkval pointer to top of heap
+  int last_stack_variable;
+  int memory= (int)&last_stack_variable - ( __brkval == 0 ? (int) &__heap_start : (int) __brkval);
   Serial.println("Free memory is: "+String(memory));
   bluetooth.send("Free memory is: "+String(memory));
    
