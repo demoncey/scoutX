@@ -149,6 +149,8 @@ void calcDistance(){
   digitalWrite(TRIG, LOW);
   t = pulseIn(ECHO, HIGH);
   distance = t / 58;
+  Serial.println("Distance is: "+String(distance));
+  bluetooth.send("Distance is: "+String(distance));
 }
 
 
