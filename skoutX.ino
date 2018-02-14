@@ -155,8 +155,12 @@ void calcDistance(){
   digitalWrite(TRIG, LOW);
   t = pulseIn(ECHO, HIGH);
   distance = t / 58;
-  Serial.println("Distance is: "+String(distance));
-  bluetooth.send("Distance is: "+String(distance));
+  Serial.println("**********************");
+  bluetooth.send("**********************");
+  Serial.println("Distance: "+String(distance));
+  bluetooth.send("Distance: "+String(distance));
+  Serial.println("**********************");
+  bluetooth.send("**********************");
 }
 
 
@@ -166,8 +170,12 @@ void memory(){
   //__brkval pointer to top of heap
   int last_stack_variable;
   int memory= (int)&last_stack_variable - ( __brkval == 0 ? (int) &__heap_start : (int) __brkval);
-  Serial.println("Free memory is: "+String(memory));
-  bluetooth.send("Free memory is: "+String(memory));
+  Serial.println("**********************");
+  bluetooth.send("**********************");
+  Serial.println("Free memory: "+String(memory));
+  bluetooth.send("Free memory: "+String(memory));
+  Serial.println("**********************");
+  bluetooth.send("**********************");
    
 }
 
