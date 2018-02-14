@@ -34,7 +34,7 @@ Supervisor supervisor("scoutx supervisor");
 Task sendMsgTask(&send_msg);
 Task recvMsgTask(&recv_msg);
 Task calcDistTask(&calcDistance);
-Task test(&chuj);
+Task test(&Motor::test);
 
 
 
@@ -62,6 +62,7 @@ void setup() {
   supervisor.addTask(sendMsgTask.setPriority(P_HIGH));//by ptr
   supervisor.addTask(recvMsgTask.setPriority(P_HIGH));//by ptr
   supervisor.addTask(calcDistTask.setPriority(P_HIGH));//by ptr
+  supervisor.addTask(test.setPriority(P_HIGH));//by ptr
 }
 
 void loop() {

@@ -16,6 +16,11 @@ class Motor
 	public:
 		Motor(Engine a,Engine b);
 		void initialize();
+		static void test(){
+			if(!Serial){return;}
+				Serial.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+				Serial.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		};
 	private:
 		Engine engine_a,engine_b;
 };

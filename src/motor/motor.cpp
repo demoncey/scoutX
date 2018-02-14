@@ -11,6 +11,9 @@ extern Motor motor;
 Motor::Motor(Engine a,Engine b):engine_a(a),engine_b(b){
 }
 
+
+
+
 void Motor::initialize(){
 	pinMode(engine_a.ENX, OUTPUT);
 	pinMode(engine_b.ENX, OUTPUT);
