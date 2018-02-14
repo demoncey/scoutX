@@ -24,7 +24,7 @@
 
 Bluetooth bluetooth(RX,TX,100);
 
-Supervisor supervisor("ScoutX supervisor");
+Supervisor supervisor("scoutx supervisor");
 //major tasks
 Task sendMsgTask(&send_msg);
 Task recvMsgTask(&recv_msg);
@@ -50,7 +50,7 @@ void setup() {
   //init HC-SR04
   pinMode(TRIG, OUTPUT);
   pinMode(ECHO, INPUT); 
-  bluetooth.init();
+  bluetooth.init();//https://www.allaboutcircuits.com/projects/control-an-arduino-using-your-phone/
   //shitty builder
   supervisor.addTask(sendMsgTask.setPriority(P_HIGH));//by ptr
   supervisor.addTask(recvMsgTask.setPriority(P_HIGH));//by ptr
