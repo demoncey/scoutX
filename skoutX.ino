@@ -47,6 +47,9 @@ void setup() {
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
+  //init HC-SR04
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT); 
   bluetooth.init();
   //shitty builder
   supervisor.addTask(sendMsgTask.setPriority(P_HIGH));//by ptr
