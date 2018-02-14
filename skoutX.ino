@@ -1,3 +1,4 @@
+#include "src/motor/motor.h"
 #include <bluetooth.h>
 #include <supervisor.h>
 #include <task.h>
@@ -23,12 +24,17 @@
 
 
 Bluetooth bluetooth(RX,TX,100);
+Engine a={ENA,IN1,IN2,SPEEDA};
+Engine b={ENB,IN2,IN2,SPEEDB};
+
+Motor motor(a,b );
 
 Supervisor supervisor("scoutx supervisor");
 //major tasks
 Task sendMsgTask(&send_msg);
 Task recvMsgTask(&recv_msg);
 Task calcDistTask(&calcDistance);
+Task test(&chuj);
 
 
 
@@ -47,6 +53,7 @@ void setup() {
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
+  //motor.initialize();
   //init HC-SR04
   pinMode(TRIG, OUTPUT);
   pinMode(ECHO, INPUT); 
