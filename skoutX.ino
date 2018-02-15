@@ -24,8 +24,8 @@
 
 
 Bluetooth bluetooth(RX,TX,100);
-Engine a={ENA,IN1,IN2,SPEEDA};
-Engine b={ENB,IN2,IN2,SPEEDB};
+Engine m_a={ENA,IN1,IN2,SPEEDA};
+Engine m_b={ENB,IN3,IN4,SPEEDB};
 
 //Motor motor;
 
@@ -41,14 +41,8 @@ void setup() {
     while (!Serial) {
     ; 
   }
-  Motor::initialize(a,b);
   //setup motor
-  pinMode(ENA, OUTPUT);
-  pinMode(ENB, OUTPUT);
-  pinMode(IN1, OUTPUT);
-  pinMode(IN2, OUTPUT);
-  pinMode(IN3, OUTPUT);
-  pinMode(IN4, OUTPUT);
+  Motor::initialize(m_a,m_b);
   //init HC-SR04
   pinMode(TRIG, OUTPUT);
   pinMode(ECHO, INPUT); 
@@ -76,14 +70,14 @@ void recv_msg() {
     Serial.println("Message from Bluetooth: "+msg);
     if(msg== String('1')){
       //start
-      Task *mStart=new Task(&motorStart);
+      Task *mStart=new Task(&Motor::motorStart);
       mStart->setMode(MODE_ONCE);
       supervisor.addTask(*mStart);
       return;
     }
     if(msg== String('2')){
       //stop
-      Task *mStop=new Task(&motorStop);
+      Task *mStop=new Task(&Motor::motorStop);
       mStop->setMode(MODE_ONCE);
       supervisor.addTask(*mStop);
       return;
@@ -91,13 +85,13 @@ void recv_msg() {
     if(msg== String('r')){
       //right
       TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&motorRight).setMode(MODE_ONCE).build());//via ptr
+      supervisor.addTask(builder.setCallback(&Motor::motorRight).setMode(MODE_ONCE).build());//via ptr
       return;
     }
     if(msg== String('l')){
       //left
       TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&motorLeft).setMode(MODE_ONCE).build());//via ptr
+      supervisor.addTask(builder.setCallback(&Motor::motorLeft).setMode(MODE_ONCE).build());//via ptr
       return;
     }
    if(msg== String('m')){
@@ -108,52 +102,6 @@ void recv_msg() {
     }
   }
 }
-
-
-void motorStop(){
-  digitalWrite(IN1,LOW);
-  digitalWrite(IN2,LOW);
-  digitalWrite(IN3,LOW);
-  digitalWrite(IN4,LOW);
-  Serial.println("Motor stopped");
-  bluetooth.send("Motor stopped");
-}
-
-void motorStart(){ 
-
-  digitalWrite(IN1,HIGH);
-  digitalWrite(IN2,LOW);
-  analogWrite(ENA,SPEEDA);
-  digitalWrite(IN3,HIGH);
-  digitalWrite(IN4,LOW);
-  analogWrite(ENB,SPEEDB);
-  Serial.println("Motor started");
-  bluetooth.send("Motor started");
-}
-
-
-void motorRight(){ 
-  digitalWrite(IN1,LOW);
-  digitalWrite(IN2,LOW);
-  digitalWrite(IN3,HIGH);
-  digitalWrite(IN4,LOW);
-  analogWrite(ENB,SPEEDB);
-  Serial.println("Motor left");
-  bluetooth.send("Motor left");
-}
-
-void motorLeft(){
-  digitalWrite(IN1,HIGH);
-  digitalWrite(IN2,LOW);
-  analogWrite(ENA,SPEEDA);
-  digitalWrite(IN3,LOW);
-  digitalWrite(IN4,LOW);
-  Serial.println("Motor right");
-  bluetooth.send("Motor right");
-}
-
-
-
 void calcDistance(){
   long t , distance;
   digitalWrite(TRIG, HIGH);
@@ -163,7 +111,7 @@ void calcDistance(){
   distance = t / 58;
   if(t<10){
       TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&motorStop).setMode(MODE_ONCE).build());
+      supervisor.addTask(builder.setCallback(&Motor::motorStop).setMode(MODE_ONCE).build());
   }
   Serial.println("**********************");
   bluetooth.send("**********************");
