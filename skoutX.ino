@@ -27,7 +27,7 @@ Bluetooth bluetooth(RX,TX,100);
 Engine a={ENA,IN1,IN2,SPEEDA};
 Engine b={ENB,IN2,IN2,SPEEDB};
 
-Motor motor(a,b );
+//Motor motor;
 
 Supervisor supervisor("scoutx supervisor");
 //major tasks
@@ -36,16 +36,12 @@ Task recvMsgTask(&recv_msg);
 Task calcDistTask(&calcDistance);
 Task test(&Motor::test);
 
-
-
-
-
-
 void setup() {
   Serial.begin(9600);
     while (!Serial) {
     ; 
   }
+  Motor::initialize(a,b);
   //setup motor
   pinMode(ENA, OUTPUT);
   pinMode(ENB, OUTPUT);
@@ -53,7 +49,6 @@ void setup() {
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
-  //motor.initialize();
   //init HC-SR04
   pinMode(TRIG, OUTPUT);
   pinMode(ECHO, INPUT); 

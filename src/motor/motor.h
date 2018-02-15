@@ -14,18 +14,17 @@ struct Engine {
 class Motor
 {
 	public:
-		Motor(Engine a,Engine b);
-		void initialize();
+		static void initialize(Engine a,Engine b);
 		static void test(){
 			if(!Serial){return;}
-				Serial.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-				Serial.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+				Serial.println("************************************************************************ "+String(engine_b.SPEED));
+				Serial.println("******** "+String(engine_b.SPEED));
 		};
+		static void motorLeft(){};
+		static void motorRight(){};
+		
+		
 	private:
-		Engine engine_a,engine_b;
+		static Engine engine_b,engine_a;
 };
-
- void chuj();
-
-
 #endif
