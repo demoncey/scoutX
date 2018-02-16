@@ -51,7 +51,9 @@ void setup() {
   supervisor.addTask(sendMsgTask.setPriority(P_HIGH));//by ptr
   supervisor.addTask(recvMsgTask.setPriority(P_HIGH));//by ptr
   supervisor.addTask(calcDistTask.setPriority(P_HIGH));//by ptr
-  supervisor.addTask(test.setPriority(P_HIGH));//by ptr
+  test.setPriority(P_HIGH);
+  //using overloaded operator
+  supervisor+test;
 }
 
 void loop() {

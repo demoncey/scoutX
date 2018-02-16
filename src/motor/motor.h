@@ -17,8 +17,10 @@ class Motor
 		static void initialize(Engine a,Engine b);
 		static void test(){
 			if(!Serial){return;}
-				Serial.println("************************************************************************ "+String(engine_b.SPEED));
-				Serial.println("******** "+String(engine_b.SPEED));
+				Serial.println("--------------------------------------------------------");
+				Serial.println(String(engine_b.SPEED));
+				Serial.println(String(engine_b.SPEED));
+				Serial.println("--------------------------------------------------------");
 		};
 		static void motorLeft();
 		static void motorRight();
