@@ -111,10 +111,10 @@ void calcDistance(){
   digitalWrite(TRIG, LOW);
   t = pulseIn(ECHO, HIGH);
   distance = t / 58;
-  if(t<10){
-      TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&Motor::motorStop).setMode(MODE_ONCE).build());
-  }
+//  if(t<10){
+//      TaskBuilder builder;
+//      supervisor.addTask(builder.setCallback(&Motor::motorStop).setMode(MODE_ONCE).build());
+//  }
   Serial.println("**********************");
   bluetooth.send("**********************");
   Serial.println("Distance: "+String(distance));
