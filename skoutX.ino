@@ -68,34 +68,29 @@ void recv_msg() {
 
   if (msg != "") {
     Serial.println("Message from Bluetooth: "+msg);
-   
+    TaskBuilder builder;
     if(msg== String('f')){
       //start
-     TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&Motor::motorStart).setMode(MODE_ONCE).setName("STOP").build());//via ptr
+      supervisor.addTask(builder.setCallback(&Motor::motorStart).setMode(MODE_ONCE).setName("MOTOR_START").build());//via ptr
       return;
     }
     if(msg== String('s')){
       //stop
-      TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&Motor::motorStop).setMode(MODE_ONCE).setName("STOP").build());//via ptr
+      supervisor.addTask(builder.setCallback(&Motor::motorStop).setMode(MODE_ONCE).setName("MOTOR_STOP").build());//via ptr
       return;
     }
     if(msg== String('r')){
       //right
-       TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&Motor::motorRight).setMode(MODE_ONCE).setName("GO_RIGHT").build());//via ptr
+      supervisor.addTask(builder.setCallback(&Motor::motorRight).setMode(MODE_ONCE).setName("MOTOR_RIGHT").build());//via ptr
       return;
     }
     if(msg== String('l')){
       //left
-      TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&Motor::motorLeft).setMode(MODE_ONCE).setName("GO_LEFT").build());//via ptr
+      supervisor.addTask(builder.setCallback(&Motor::motorLeft).setMode(MODE_ONCE).setName("MOTOR_LEFT").build());//via ptr
       return;
     }
    if(msg== String('m')){
       //free ram memory messurment
-      TaskBuilder builder;
       supervisor.addTask(builder.setCallback(&memory).setMode(MODE_ONCE).setName("GET_MEM").build());//via ptr
       return;
     }
