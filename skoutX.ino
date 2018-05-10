@@ -68,6 +68,7 @@ void recv_msg() {
 
   if (msg != "") {
     Serial.println("Message from Bluetooth: "+msg);
+    //Task stored in Heap so wrong
     TaskBuilder builder;
     if(msg== String('f')){
       //start
