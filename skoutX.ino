@@ -27,14 +27,11 @@ Bluetooth bluetooth(RX,TX,100);
 Engine m_a={ENA,IN1,IN2,SPEEDA};
 Engine m_b={ENB,IN3,IN4,SPEEDB};
 
-//Motor motor;
-
 Supervisor supervisor("scoutx supervisor");
 //major tasks
 Task sendMsgTask(&send_msg);
 Task recvMsgTask(&recv_msg);
 Task calcDistTask(&calcDistance);
-Task test(&Motor::test);
 
 void setup() {
   Serial.begin(9600);
@@ -48,12 +45,12 @@ void setup() {
   pinMode(ECHO, INPUT); 
   bluetooth.init();//https://www.allaboutcircuits.com/projects/control-an-arduino-using-your-phone/
   //shitty builder
+  sendMsgTask.name="SEND_MSG";
+  recvMsgTask.name="RECV_MSG";
+  calcDistTask.name="CALC_DIST";
   supervisor.addTask(sendMsgTask.setPriority(P_HIGH));//by ptr
   supervisor.addTask(recvMsgTask.setPriority(P_HIGH));//by ptr
   supervisor.addTask(calcDistTask.setPriority(P_HIGH));//by ptr
-  test.setPriority(P_HIGH);
-  //using overloaded operator
-  supervisor+test;
 }
 
 void loop() {
@@ -68,38 +65,38 @@ void send_msg() {
 
 void recv_msg() {
   String msg = bluetooth.recv();
+
   if (msg != "") {
     Serial.println("Message from Bluetooth: "+msg);
-    if(msg== String('1')){
+   
+    if(msg== String('f')){
       //start
-      Task *mStart=new Task(&Motor::motorStart);
-      mStart->setMode(MODE_ONCE);
-      supervisor.addTask(*mStart);
+     TaskBuilder builder;
+      supervisor.addTask(builder.setCallback(&Motor::motorStart).setMode(MODE_ONCE).setName("STOP").build());//via ptr
       return;
     }
-    if(msg== String('2')){
+    if(msg== String('s')){
       //stop
-      Task *mStop=new Task(&Motor::motorStop);
-      mStop->setMode(MODE_ONCE);
-      supervisor.addTask(*mStop);
+      TaskBuilder builder;
+      supervisor.addTask(builder.setCallback(&Motor::motorStop).setMode(MODE_ONCE).setName("STOP").build());//via ptr
       return;
     }
     if(msg== String('r')){
       //right
-      TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&Motor::motorRight).setMode(MODE_ONCE).build());//via ptr
+       TaskBuilder builder;
+      supervisor.addTask(builder.setCallback(&Motor::motorRight).setMode(MODE_ONCE).setName("GO_RIGHT").build());//via ptr
       return;
     }
     if(msg== String('l')){
       //left
       TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&Motor::motorLeft).setMode(MODE_ONCE).build());//via ptr
+      supervisor.addTask(builder.setCallback(&Motor::motorLeft).setMode(MODE_ONCE).setName("GO_LEFT").build());//via ptr
       return;
     }
    if(msg== String('m')){
       //free ram memory messurment
       TaskBuilder builder;
-      supervisor.addTask(builder.setCallback(&memory).setMode(MODE_ONCE).build());//via ptr
+      supervisor.addTask(builder.setCallback(&memory).setMode(MODE_ONCE).setName("GET_MEM").build());//via ptr
       return;
     }
   }
@@ -136,12 +133,6 @@ void memory(){
   bluetooth.send("Free memory: "+String(memory));
   Serial.println("**********************");
   bluetooth.send("**********************");
+  delay(1000);
    
 }
-
-
-
-
-
-
-
