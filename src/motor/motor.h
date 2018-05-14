@@ -22,10 +22,10 @@ class Motor
 				Serial.println(String(engine_b.SPEED));
 				Serial.println("--------------------------------------------------------");
 		};
-		static void motorLeft();
-		static void motorRight();
-		static void motorStart();
-		static void motorStop();
+		static void motorLeft(void *p);
+		static void motorRight(void *p);
+		static void motorStart(void *p);
+		static void motorStop(void *p);
 		
 		
 	private:

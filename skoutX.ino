@@ -54,16 +54,18 @@ void setup() {
 }
 
 void loop() {
+  //recv_msg();
+  //send_msg();
   supervisor.execute();
 }
 
-void send_msg() {
+void send_msg(ARGS) {
   int id = random(1,65536);
   Serial.println("Heartbeat msg: "+String(id,HEX));
   bluetooth.send("Heartbeat msg: "+String(id,HEX));
 }
 
-void recv_msg() {
+void recv_msg(ARGS) {
   String msg = bluetooth.recv();
 
   if (msg != "") {
@@ -97,7 +99,7 @@ void recv_msg() {
     }
   }
 }
-void calcDistance(){
+void calcDistance(ARGS){
   long t , distance;
   digitalWrite(TRIG, HIGH);
   delayMicroseconds(10);
@@ -117,7 +119,7 @@ void calcDistance(){
 }
 
 
-void memory(){
+void memory(ARGS){
   ////https://arduino.stackexchange.com/questions/355/how-much-can-i-recurse-how-much-can-i-recurse-how-much-caqfsdrfw
   extern int __heap_start, *__brkval; 
   //__brkval pointer to top of heap

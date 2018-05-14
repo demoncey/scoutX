@@ -12,7 +12,7 @@ void Motor::initialize(Engine a,Engine b){
 }
 
 
-void Motor::motorLeft(){
+void Motor::motorLeft(void *p){
 	digitalWrite(engine_a.IN1,HIGH);
 	digitalWrite(engine_a.IN2,LOW);
 	analogWrite(engine_a.ENX,engine_a.SPEED);
@@ -21,7 +21,7 @@ void Motor::motorLeft(){
 	Serial.println("Motor right");
 }
 
-void Motor::motorRight(){
+void Motor::motorRight(void *p){
 	digitalWrite(engine_a.IN1,LOW);
 	digitalWrite(engine_a.IN2,LOW);
 	digitalWrite(engine_b.IN1,HIGH);
@@ -31,7 +31,7 @@ void Motor::motorRight(){
 }
 
 
-void Motor::motorStart(){
+void Motor::motorStart(void *p){
 	digitalWrite(engine_a.IN1,HIGH);
 	digitalWrite(engine_a.IN2,LOW);
 	analogWrite(engine_a.ENX,engine_a.SPEED);
@@ -41,7 +41,7 @@ void Motor::motorStart(){
 	Serial.println("Motor started");
 }
 
-void Motor::motorStop(){
+void Motor::motorStop(void *p){
 	digitalWrite(engine_a.IN1,LOW);
 	digitalWrite(engine_a.IN2,LOW);
 	digitalWrite(engine_b.IN1,LOW);
